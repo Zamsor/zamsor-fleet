@@ -32,3 +32,20 @@
 - ADDED: Mountain Time display (TZ_DISPLAY override); JSON stays UTC ISO.
 - NOT DONE: second player's profile test (no other profile pubkey on hand); rename detection; SQLite; real `git clone` (SK5K/zamsor-fleet not visible to Cursor — not created or not granted).
 - Note: "dormant" crew fleets have deep history (2 Live Crew >60k sigs), so creation dates for every fleet = minutes each; demo should backfill ONE fleet live, not all 33.
+
+## Saturday rehearsal — Oct 31, 2026 ~10:12 AM MDT
+- **PASS.** Fresh /tmp from `zamsor-fleet-push.tar.gz` (same tree as private Zamsor/zamsor-fleet), no RAW, public Solana RPC, real Zamsor profile.
+- `npm i` + `tsc` clean; `fleets --activity` = 33 fleets w/ MT last-activity ~57s; many active this morning.
+- Poor Jimmy: `fleet` pre-backfill correctly unsseeded; `backfill --max 3000` → 3000 txs / 13.8s, cap hit; then history Oct 17–Oct 31.
+- Non-fleet (profile) address rejected with clear message (exit code still 0 — fix later, not Monday blocker).
+- Sunday ZAM-06 proof still safe; no scope cut. One-shot Sat rehearsal routine deleted.
+
+## Sun Nov 1 ZAM-06 formal proof (Nov 1, 2026, 4:19–4:21 AM MST): **PASS**
+- Tree: a fresh /tmp/zam06 extracted from `zamsor-fleet-push.tar.gz` (sha256 75a1b72f…c83a). `src/cli.ts`, `sage.ts`, and `rpc.ts` were diffed against private Zamsor/zamsor-fleet via Cursor GitHub (read-only) and are **identical**. `git clone` over plain https was not possible (no box git creds), so the tarball was the shipped-tree proxy. RAW_DIR was set to a nonexistent path, so there was no RAW. Public RPC `api.mainnet-beta.solana.com`, no key.
+1. PASS: `npm i` + `npx tsc --noEmit` clean.
+2. PASS: `fleets --activity` = **33 live fleets** with labels in 22.3 s. 17 were active within the last hour (e.g. Willy Wonka and Cool Hand Luke at 4:19 AM MST).
+3. PASS: `fleet 5F2rn…` returns label "Poor Jimmy's Airbike", owner DaFGA…, last activity Nov 1, 2026 3:47 AM MST. Before backfill it correctly reports "not seeded yet".
+4. PASS: profile DaFGA… and system program 1111… both get "Not a live SAGE fleet account…" with **exit 1**. The Saturday exit-0 issue no longer reproduces.
+5. PASS: `backfill 5F2rn… --max 3000` = 3000 sigs in 1.8 s, oldest Oct 18, 2026 3:16 PM MDT, labeled honestly as "cap hit; not creation". `fleet` then shows history from Oct 18 to Nov 1.
+6. PASS: no RAW, .env, keypair, pem, or token patterns in the tree. The tarball has 0 RAW entries, and `.gitignore` excludes node_modules and data/*.json.
+- No scope cut. Known limits are unchanged: mainnet SAGE only, no rename detection, and full creation-date backfill takes minutes per active fleet.
